@@ -1,0 +1,51 @@
+<!DOCTYPE html>
+{% load static %}
+<html lang="en">
+<head>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Explora&family=Sofia+Sans+Semi+Condensed:wght@200&display=swap" rel="stylesheet">
+
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Map</title>
+
+    <link rel="stylesheet" href="{% static 'lib/ol3/ol.css' %}">
+    <link rel="stylesheet" href="{% static 'style/map.css' %}">
+</head>
+<body>
+    {% if user.is_authenticated %}
+    <a id="logout" href="/logout">خروج از سیستم</a>
+    {% endif %}
+
+    <div id="map"></div>
+    <div id="address" class="address"></div>
+    <div id="information"><table id="identify"></table></iframe></div>
+
+    <script src="{% static 'lib/ol3/ol-debug.js' %}"></script>
+    <script src="{% static 'app/map.js' %}"></script>
+
+    <script>
+        function addMarker(coordinates) {
+            vectorSource.clear();
+            const iconGeometry = new ol.geom.Point(ol.proj.fromLonLat(coordinates));
+            var iconFeature = new ol.Feature({
+                geometry: iconGeometry,
+            });
+            var iconStyle = new ol.style.Style({
+                image: new ol.style.Icon({
+                anchor: [0.5, 20],
+                anchorXUnits: "fraction",
+                anchorYUnits: "pixels",
+                size: [24, 24],
+                opacity: 1,
+                src: "{% static 'img/marker.png' %}",
+                }),
+            });
+            iconFeature.setStyle(iconStyle);
+            vectorSource.addFeatures([iconFeature]);
+        }
+    </script>
+</body>
+</html>
